@@ -1,0 +1,61 @@
+/* Estilos globales para web */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#root {
+  height: 100%;
+  overflow: auto;
+}
+
+/* Mejorar el scroll en dispositivos táctiles */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Estilos para el scroll personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Asegurar que los contenedores flex permitan scroll */
+.react-native-web-view {
+  overflow: auto !important;
+}
+
+/* Mejorar la experiencia táctil en web */
+button, [role="button"] {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevenir zoom en inputs en iOS */
+input, textarea, select {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  /* Estilos específicos para móvil */
+  body {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+}

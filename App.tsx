@@ -1,20 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { AppNavigator } from './navigation/AppNavigator';
+import { getTheme } from './theme/theme';
 
+// Componente principal de la aplicación
 export default function App() {
+  // Estado para manejar el tema (claro/oscuro)
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  
+  // Función para alternar entre tema claro y oscuro
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+  
+  // Obtener el tema actual basado en el estado
+  const currentTheme = getTheme(isDarkMode);
+  
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <AppNavigator 
+      theme={currentTheme}
+      isDarkMode={isDarkMode}
+      toggleTheme={toggleTheme}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
