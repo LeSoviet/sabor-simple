@@ -41,6 +41,59 @@ html, body {
   overflow: auto !important;
 }
 
+/* Estilos específicos para React Native Web */
+
+/* Contenedor principal */
+body, html {
+  height: 100%;
+  overflow: hidden;
+}
+
+#root {
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Estilos para FlatList en web */
+[data-testid="flatlist"], [role="list"] {
+  overflow-y: auto !important;
+  height: 100% !important;
+  flex: 1 !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Contenedores flex */
+div[style*="flex: 1"] {
+  overflow: hidden !important;
+}
+
+/* Scroll suave */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Mejorar scroll en React Native Web */
+.react-native-web-view {
+  overflow: visible !important;
+}
+
+/* Optimizaciones específicas para React Native Web */
+[data-focusable="true"] {
+  outline: none;
+}
+
+/* Mejorar rendimiento de animaciones en web */
+* {
+  will-change: auto;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Evitar warnings de pointerEvents */
+[style*="pointer-events"] {
+  pointer-events: inherit !important;
+}
+
 /* Mejorar la experiencia táctil en web */
 button, [role="button"] {
   cursor: pointer;

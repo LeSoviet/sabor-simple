@@ -8,7 +8,9 @@ import {
   TouchableOpacity,
   StatusBar,
   Animated,
+  Easing,
 } from 'react-native';
+import { AnimatedScreenTransition } from '../components/AnimatedScreenTransition';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { Recipe } from '../data/recipes';
@@ -60,7 +62,7 @@ export const RecipeScreen: React.FC<RecipeScreenProps> = ({
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 600,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start();
   }, [recipe]);
 
@@ -132,11 +134,13 @@ export const RecipeScreen: React.FC<RecipeScreenProps> = ({
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={theme.background}
-      />
+    <AnimatedScreenTransition animationType="slideUp" duration={500}>
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor={theme.background}
+          translucent={false}
+        />
       
       {/* Header con botón de regreso y favorito */}
       <View style={[styles.header, { backgroundColor: theme.surface, borderBottomColor: theme.border }]}>
@@ -211,6 +215,7 @@ export const RecipeScreen: React.FC<RecipeScreenProps> = ({
         <View style={styles.bottomSpacing} />
       </Animated.ScrollView>
     </SafeAreaView>
+    </AnimatedScreenTransition>
   );
 };
 

@@ -64,12 +64,12 @@ export const Timer: React.FC<TimerProps> = ({ timeText, onComplete }) => {
         Animated.timing(scaleAnim, {
           toValue: 1.2,
           duration: 200,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(scaleAnim, {
           toValue: 1,
           duration: 200,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
       ]).start();
 
@@ -79,12 +79,12 @@ export const Timer: React.FC<TimerProps> = ({ timeText, onComplete }) => {
           Animated.timing(pulseAnim, {
             toValue: 1.1,
             duration: 500,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
           Animated.timing(pulseAnim, {
             toValue: 1,
             duration: 500,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
         ]).start(() => {
           if (state === 'completed') {

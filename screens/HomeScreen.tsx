@@ -3,17 +3,18 @@ import {
   View,
   Text,
   FlatList,
-  StyleSheet,
-  SafeAreaView,
-  Switch,
-  StatusBar,
   TouchableOpacity,
-  Animated,
+  StyleSheet,
+  StatusBar,
+  Switch,
+  TextInput,
+  Platform,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useFocusEffect } from '@react-navigation/native';
 import { recipes, Recipe } from '../data/recipes';
-import { RecipeCard } from '../components/RecipeCard';
+import { AnimatedRecipeCard } from '../components/AnimatedRecipeCard';
+import { AnimatedScreenTransition } from '../components/AnimatedScreenTransition';
 import { StorageService } from '../utils/storage';
 import { Theme } from '../theme/theme';
 
@@ -42,10 +43,29 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   isDarkMode,
   toggleTheme,
 }) => {
-  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
   const [currentFilter, setCurrentFilter] = useState<FilterType>('all');
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+
+  // Filtrar recetas según el filtro actual y búsqueda
+  const filteredRecipes = recipes
+    .filter(recipe => {
+      // Filtro por favoritos
+      if (currentFilter === 'favorites' && !favoriteIds.includes(recipe.id)) {
+        return false;
+      }
+      // Filtro por búsqueda
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase();
+        return recipe.title.toLowerCase().includes(query) ||
+               recipe.description.toLowerCase().includes(query) ||
+               recipe.ingredients.some(ingredient => 
+                 ingredient.toLowerCase().includes(query)
+               );
+      }
+      return true;
+    });
 
   useEffect(() => {
     loadFavorites();
@@ -58,10 +78,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     }, [])
   );
 
-  useEffect(() => {
-    filterRecipes();
-  }, [currentFilter, favoriteIds]);
-
   const loadFavorites = async () => {
     try {
       const favorites = await StorageService.getFavorites();
@@ -70,15 +86,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       console.error('Error cargando favoritos:', error);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const filterRecipes = () => {
-    if (currentFilter === 'favorites') {
-      const favRecipes = recipes.filter(recipe => favoriteIds.includes(recipe.id));
-      setFilteredRecipes(favRecipes);
-    } else {
-      setFilteredRecipes(recipes);
     }
   };
 
@@ -95,24 +102,19 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     navigation.navigate('Recipe', { recipe });
   };
 
-  // Renderizar cada item de la lista
-  const renderRecipeItem = ({ item, index }: { item: Recipe; index: number }) => (
-    <RecipeCard
-      recipe={item}
-      onPress={() => handleRecipePress(item)}
-      theme={theme}
-      index={index}
-      onFavoriteChange={handleFavoriteChange}
-    />
-  );
+
 
   // Componente del header con título y switch de tema
   const renderHeader = () => (
     <View style={[styles.header, { backgroundColor: theme.surface }]}>
-      <Text style={[styles.title, { color: theme.text }]}>Sabor Simple</Text>
-      <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
-        Recetas deliciosas y fáciles
-      </Text>
+      <View style={styles.titleContainer}>
+        <Text style={[styles.title, { color: theme.text }]}>🍽️ Sabor Simple</Text>
+        <View style={styles.subtitleContainer}>
+          <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
+            ✨ Recetas deliciosas y fáciles ✨
+          </Text>
+        </View>
+      </View>
       
       {/* Switch para cambiar tema */}
       <View style={styles.themeToggle}>
@@ -130,13 +132,34 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   );
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+    <AnimatedScreenTransition animationType="fade" duration={600}>
+      <View style={[styles.container, { backgroundColor: theme.background }]}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={theme.background}
+        translucent={false}
       />
       
       {renderHeader()}
+      
+      {/* Buscador */}
+      <View style={[styles.searchContainer, { backgroundColor: theme.surface }]}>
+        <TextInput
+          style={[
+            styles.searchInput,
+            {
+              backgroundColor: theme.background,
+              borderColor: theme.border,
+              color: theme.text,
+            },
+          ]}
+          placeholder="Buscar recetas, ingredientes..."
+          placeholderTextColor={theme.textSecondary}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          clearButtonMode="while-editing"
+        />
+      </View>
       
       {/* Filtros */}
       <View style={styles.filtersContainer}>
@@ -191,10 +214,28 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       ) : filteredRecipes.length > 0 ? (
         <FlatList
           data={filteredRecipes}
-          renderItem={renderRecipeItem}
           keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => (
+             <AnimatedRecipeCard
+               recipe={item}
+               onPress={() => handleRecipePress(item)}
+               theme={theme}
+               index={index}
+               onFavoriteChange={handleFavoriteChange}
+             />
+           )}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
+          style={styles.scrollContainer}
+          removeClippedSubviews={Platform.OS === 'android'}
+          maxToRenderPerBatch={10}
+          windowSize={10}
+          initialNumToRender={8}
+          getItemLayout={(data, index) => ({
+            length: 120,
+            offset: 120 * index,
+            index,
+          })}
         />
       ) : (
         <View style={styles.emptyContainer}>
@@ -219,7 +260,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           )}
         </View>
       )}
-    </SafeAreaView>
+    </View>
+    </AnimatedScreenTransition>
   );
 };
 
@@ -228,22 +270,51 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContent: {
+    paddingHorizontal: 20,
     paddingBottom: 20,
+  },
+  scrollContainer: {
+    flex: 1,
+  },
+  searchContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  searchInput: {
+    borderWidth: 1,
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    fontSize: 16,
   },
   header: {
     padding: 20,
-    marginBottom: 10,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  titleContainer: {
+    alignItems: 'center',
+    marginBottom: 15,
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    textAlign: 'center',
     marginBottom: 8,
+    textAlign: 'center',
+    letterSpacing: 1,
+  },
+  subtitleContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 15,
+    backgroundColor: 'rgba(255, 165, 0, 0.1)',
   },
   subtitle: {
     fontSize: 16,
+    fontStyle: 'italic',
     textAlign: 'center',
-    marginBottom: 20,
+    fontWeight: '500',
   },
   themeToggle: {
     flexDirection: 'row',
@@ -289,8 +360,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 40,
-    paddingVertical: 60,
+    padding: 40,
   },
   emptyTitle: {
     fontSize: 24,
@@ -298,11 +368,18 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     textAlign: 'center',
   },
+  emptyText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
   emptyDescription: {
-    fontSize: 16,
+    fontSize: 14,
     textAlign: 'center',
     lineHeight: 24,
     marginBottom: 24,
+    fontStyle: 'italic',
   },
   showAllButton: {
     paddingVertical: 12,
