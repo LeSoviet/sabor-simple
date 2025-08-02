@@ -132,9 +132,9 @@ export const AnimatedRecipeCard: React.FC<AnimatedRecipeCardProps> = ({
         activeOpacity={0.9}
       >
         {/* Emoji del plato */}
-        <View style={styles.imageContainer}>
-          <Text style={styles.emoji}>{recipe.image}</Text>
-        </View>
+        <View style={[styles.imageContainer, { backgroundColor: theme.surface }]}>
+            <Text style={styles.emoji}>{recipe.image}</Text>
+          </View>
 
         {/* Contenido de la tarjeta */}
         <View style={styles.content}>
@@ -173,78 +173,86 @@ export const AnimatedRecipeCard: React.FC<AnimatedRecipeCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 8,
+    marginVertical: 10,
     marginHorizontal: 0,
   },
   card: {
     flexDirection: 'row',
-    borderRadius: 16,
-    borderWidth: 1,
+    borderRadius: 20,
+    borderWidth: 0,
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 6,
     },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    elevation: 8,
     overflow: 'hidden',
   },
   imageContainer: {
-    width: 90,
-    height: 90,
+    width: 100,
+    height: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 16,
+    margin: 20,
+    borderRadius: 16,
   },
   emoji: {
-    fontSize: 45,
+    fontSize: 50,
   },
   content: {
     flex: 1,
-    padding: 16,
+    padding: 20,
     justifyContent: 'space-between',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 12,
+    marginBottom: 14,
   },
   titleContainer: {
     flex: 1,
-    marginRight: 12,
+    marginRight: 16,
   },
   favoriteContainer: {
-    marginTop: -4,
+    marginTop: -2,
   },
   title: {
-    fontSize: 19,
-    fontWeight: 'bold',
-    marginBottom: 6,
-    lineHeight: 24,
+    fontSize: 20,
+    fontWeight: '800',
+    marginBottom: 8,
+    lineHeight: 26,
   },
   description: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 15,
+    lineHeight: 22,
+    opacity: 0.8,
   },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 8,
+    marginTop: 12,
   },
   badge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   badgeText: {
     color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: 13,
+    fontWeight: '800',
   },
   prepTime: {
-    fontSize: 13,
-    fontWeight: '600',
+    fontSize: 14,
+    fontWeight: '700',
+    opacity: 0.7,
   },
 });

@@ -199,7 +199,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               color: currentFilter === 'favorites' ? theme.background : theme.primary,
             }
           ]}>
-            ❤️ Favoritas ({favoriteIds.length})
+            ❤️ Favoritos ({favoriteIds.length})
           </Text>
         </TouchableOpacity>
       </View>
@@ -240,11 +240,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       ) : (
         <View style={styles.emptyContainer}>
           <Text style={[styles.emptyTitle, { color: theme.text }]}>
-            {currentFilter === 'favorites' ? '💔 Sin favoritas' : '📭 Sin recetas'}
+            {currentFilter === 'favorites' ? '💔 Sin favoritos' : '📭 Sin recetas'}
           </Text>
           <Text style={[styles.emptyDescription, { color: theme.textSecondary }]}>
             {currentFilter === 'favorites' 
-              ? 'Agrega algunas recetas a favoritos para verlas aquí'
+              ? 'Agrega algunas recetas a tus favoritos para verlas aquí'
               : 'No hay recetas disponibles'
             }
           </Text>
@@ -278,43 +278,54 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 8,
   },
   searchInput: {
-    borderWidth: 1,
-    borderRadius: 25,
+    borderWidth: 0,
+    borderRadius: 16,
     paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingVertical: 16,
     fontSize: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   header: {
-    padding: 20,
+    padding: 12,
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomWidth: 0,
+    marginBottom: 4,
   },
   titleContainer: {
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 8,
   },
   title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 8,
+    fontSize: 28,
+    fontWeight: '800',
+    marginBottom: 6,
     textAlign: 'center',
-    letterSpacing: 1,
+    letterSpacing: -0.5,
   },
   subtitleContainer: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 15,
-    backgroundColor: 'rgba(255, 165, 0, 0.1)',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 165, 0, 0.15)',
+    shadowColor: '#FFA500',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontStyle: 'italic',
     textAlign: 'center',
-    fontWeight: '500',
+    fontWeight: '600',
+    color: '#FF8C00',
   },
   themeToggle: {
     flexDirection: 'row',
@@ -332,20 +343,25 @@ const styles = StyleSheet.create({
   filtersContainer: {
     flexDirection: 'row',
     paddingHorizontal: 20,
-    paddingVertical: 10,
-    gap: 10,
+    paddingVertical: 16,
+    gap: 12,
   },
   filterButton: {
     flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 25,
-    borderWidth: 2,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    borderRadius: 16,
+    borderWidth: 0,
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   filterText: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '700',
   },
   loadingContainer: {
     flex: 1,

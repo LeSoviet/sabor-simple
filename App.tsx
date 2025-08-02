@@ -6,7 +6,7 @@ import { getTheme } from './theme/theme';
 // Componente principal de la aplicación
 export default function App() {
   // Estado para manejar el tema (claro/oscuro)
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
   
   // Función para alternar entre tema claro y oscuro
   const toggleTheme = () => {

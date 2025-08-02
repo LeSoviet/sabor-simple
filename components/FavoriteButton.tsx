@@ -154,7 +154,7 @@ export const FavoriteButton: React.FC<FavoriteButtonProps> = ({
         style={[
           styles.container,
           sizeStyles.container,
-          { backgroundColor: theme.card }
+          { backgroundColor: theme.surface }
         ]}
         disabled
       >
@@ -174,7 +174,7 @@ export const FavoriteButton: React.FC<FavoriteButtonProps> = ({
         styles.container,
         sizeStyles.container,
         {
-          backgroundColor: isFavorite ? theme.surface : theme.card,
+          backgroundColor: isFavorite ? theme.primary + '20' : theme.surface,
           borderColor: isFavorite ? theme.primary : theme.border,
           borderWidth: isFavorite ? 2 : 1,
         }
